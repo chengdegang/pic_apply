@@ -1,15 +1,8 @@
-# ============================================================
-#   Copyright (c) 2020, EZXR Inc. All rights reserved
-#   File        : data_aug.py
-#   Author      : qinyu@ezxr.com
-#   Created date: 2020/8/11 18:28
-#   Description : split the videos and data augmentation
-# ============================================================
+#   Author      : qinyu
 
 import cv2
 import threading
 import glob
-import functools
 import os
 import numpy as np
 import shutil
@@ -95,8 +88,7 @@ def video2frame(data_dir, interval, stage, is_data_aug=True, **kwargs):
                         # data augmentation
                         if is_data_aug:
                             image_name = os.path.basename(os.path.splitext(image_saved_path)[0])
-                            data_augmentation(resize_frame, data_aug_dir,
-                                              image_name=image_name, **kwargs)
+                            # data_augmentation(resize_frame, data_aug_dir,image_name=image_name, **kwargs)
                         frame_count += interval
                     frame_index += 1
             except Exception:
@@ -221,7 +213,7 @@ if __name__ == '__main__':
     #     '{}/{}'.format(data_dir, 'others'),
     #
     # ]
-    video2frame(data_dir, 5, "train", is_data_aug=False, **data_aug_kwargs)
+    video2frame(data_dir, 10, "train", is_data_aug=False, **data_aug_kwargs)
 
 
     
