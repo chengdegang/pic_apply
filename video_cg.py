@@ -2,7 +2,38 @@ import cv2
 import os
 import glob
 
-def process_video(video_path, save_path, interval=10, need_rotate=True):
+def changesize(file):
+    """
+    输入路径在输入路径下创建result文件夹存放结果，将图片统一转换成指定像素大小
+    """
+    imagedirs = []
+    resultdir = f"{'/'.join(file.split('/')[:-1])}/result/"
+    # print(resultdir)
+    if os.path.exists(resultdir) == True:
+        print(f'写入路径 {resultdir} 已存在')
+    else:
+        os.makedirs(resultdir)
+        # 找到指定路径下的所有图片文件
+        for root, dirs, files in os.walk(file):
+            for f in files:
+                if '.jpg' in f:
+                    # print(f)
+                    # 打印文件路径
+                    # print(os.path.join(root, f))
+                    imagedirs.append(os.path.join(root, f))
+        # 遍历所有图片并转换至当前路径
+        for i in range(len(imagedirs)):
+            image = cv2.imread(imagedirs[i])
+            # 获取图片的名称
+            name = imagedirs[i].split('/')[-1].split('.')[0]
+            # print(name)
+            change_image = cv2.resize(image, (640, 360))
+            cv2.imwrite(f'{resultdir}{name}_cg.jpg', change_image)
+            # print(imagedirs[i])
+        print(f'已处理 {len(imagedirs)} 张图片')
+        print(f'生成的路径为: {resultdir}')
+
+def process_video(video_path, save_path, interval=10, need_rotate=False):
     """
     :param video_path: 视频所在文件夹路径。脚本会读取该路线下所有的文件，包括子文件夹中的文件
     :param save_path:生成的图片的保存路径。如果路径不存在，脚本会自动创建
@@ -44,7 +75,10 @@ def process_video(video_path, save_path, interval=10, need_rotate=True):
 
 if __name__ == '__main__':
     video_path = '/Users/jackrechard/PycharmProjects/pic_apply/oridata'
-    save_path = '/Users/jackrechard/PycharmProjects/pic_apply/result1'
+    save_path = f'{video_path}/restemp'
     interval = 10
     need_rotate = True
     process_video(video_path, save_path, interval, need_rotate)
+    need_change = True
+    if need_change:
+        changesize(save_path)
