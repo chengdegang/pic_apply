@@ -34,6 +34,8 @@ def process_video(video_path, save_path, interval=10, need_rotate=False):
                     file_name = os.path.join(save_path, video_name + '_' + str(count) + '.jpg')
                     if need_rotate:
                         frame = cv2.rotate(frame, 0)
+                        frame = cv2.rotate(frame, 0)
+                        frame = cv2.rotate(frame, 0)
                     cv2.imwrite(file_name, frame)
             else:
                 break
@@ -56,13 +58,41 @@ def word():
     #     # print(words[i]['words'])
     # print(allwords)
 
+testpath = '/Users/jackrechard/PycharmProjects/pic_apply/oridata/video'
+# testpath = '/123/456/789/111/222/333'
+def del_data():
+    # path = '/Users/jackrechard/PycharmProjects/pic_apply/oridata/video'
+    path1 = testpath
+    # print(testpath)
+    print(path1)
+    # print(os.path.join(testpath,'restemp'))
+    # os.remove(os.path.join(testpath,'restemp'))
+    # os.remove(os.path.join(testpath,'result'))
+    # print('删除完成')
+    # os.mkdir('/Users/jackrechard/PycharmProjects/pic_apply/oridata/ccc')
+    os.remove('/Users/jackrechard/PycharmProjects/pic_apply/oridata/ccc')
 
-video_path = '/Users/jackrechard/PycharmProjects/pic_apply/oridata'
-interval = 10
+
+def path():
+    path0 = os.getcwd()
+    print(path0)
+    path1 = '/Users/jackrechard/PycharmProjects/pic_apply/oridata/video'
+    path2 = 'PycharmProjects'
+    path3 = ''
+    path5 = os.path.join(path1,'restemp')
+    print(path5)
+
+
+video_path = '/Users/jackrechard/PycharmProjects/pic_apply/oridata/video'
+interval = 20
 need_rotate = True
+
 
 if __name__ == '__main__':
     #处理视频的部分
-    # save_path = f'{video_path}/restemp'
-    # process_video(video_path, save_path, int(interval), need_rotate)
-    word()
+    save_path = f'{video_path}/restemp'
+    process_video(video_path, save_path, int(interval), need_rotate)
+    # word()
+    # os()
+    # path()
+    # del_data()

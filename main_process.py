@@ -66,6 +66,8 @@ def process_video(video_path, save_path, interval=10, need_rotate=False):
                 if count % interval == 0:
                     file_name = os.path.join(save_path, video_name + '_' + str(count) + '.jpg')
                     if need_rotate:
+                        frame = cv2.rotate(frame, 0) #顺时针旋转90度
+                        frame = cv2.rotate(frame, 0)
                         frame = cv2.rotate(frame, 0)
                     cv2.imwrite(file_name, frame)
             else:
@@ -85,17 +87,27 @@ def post_cloud(ip,url,protobufEncodingData,imageEncodingData):
     }
 }
     req = requests.post(url, json=data)
-    # print(req.json()['msg'])
+    # print(req.json()['msg']) #调试用
+    # print(req.json()) #调试用
     return req.json()
 
 def protobufEncodingData_deal():
     1
     # 暂不需要处理该入参，写死即可
 
-"""
-遍历指定路径下的所有图片，并转换成base64
-"""
+
+def del_data():
+    """
+    测试数据删除，仅保留输入路径的文件数据
+    """
+    os.remove(os.path.join(video_path,'restemp'))
+    os.remove(os.path.join(video_path,'result'))
+    print('删除完成')
+
 def imageEncodingData_deal(file):
+    """
+    遍历指定路径下的所有图片，并转换成base64
+    """
     imagedirs = []
     base64_datas = []
     if os.path.exists(file) == False:
@@ -122,9 +134,11 @@ def imageEncodingData_deal(file):
     # print(base64_datas[0])
     return base64_datas
 
-video_path = '/Users/jackrechard/PycharmProjects/pic_apply/oridata'
-ip = 'yx-dp1-ddhjng.ezxr.net'
-url = '/api/alg/cloud/aw/reloc?map=jqzdyz'
+video_path = '/Users/jackrechard/PycharmProjects/pic_apply/oridata/video'
+# video_path = '/Users/jackrechard/PycharmProjects/pic_apply/oridata/w'
+ip = 'reloc-gw.easexr.com'
+url = '/api/alg/cloud/aw/reloc/proxy?routeApp=parkc&map=c6'
+# url = '/api/alg/cloud/aw/reloc/proxy?routeApp=wh.jgs&map=entry'
 interval = 10
 need_rotate = True
 need_change = True
@@ -139,7 +153,7 @@ need_change = True
 if __name__ == '__main__':
     #处理视频的部分
     save_path = f'{video_path}/restemp'
-    process_video(video_path, save_path, interval, need_rotate)
+    process_video(video_path, save_path, int(interval), need_rotate)
     if need_change:
         changesize(save_path)
 
@@ -151,6 +165,7 @@ if __name__ == '__main__':
     imageEncodingData = imageEncodingData_deal(f'{video_path}/result')
 
     for i in range(len(imageEncodingData)):
+    # for i in range(5):
         data1 = post_cloud(ip=ip, url=url,
                            protobufEncodingData=protobufEncodingData[0], imageEncodingData=imageEncodingData[i])
         try:
@@ -166,6 +181,15 @@ if __name__ == '__main__':
     print(f'-----test data({timenow})-----')
     print(f'总共 {len(imageEncodingData)} 张图片')
     print(f'定位成功的次数是:{result_suc}  定位失败的次数是:{result_fail}  请求错误的次数是:{result_wrong}')
+    sucbai = (result_suc/len(imageEncodingData))*100
+    print(f"定位成功率为 { float('%.2f' % sucbai) }%")
+    print(f'本次测试请求链接是：{ip}{url}')
+    print(f'本次测试数据源路径是：{video_path}')
+
+    """
+    调试部分
+    """
+
 
 
 
